@@ -149,7 +149,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             color=cor_rssi_up
         )
     if rssi_down or rssi_up:
-        ax1.legend(loc='upper right')
+        ax1.legend(loc='upper right', fontsize=8)
         todos_rssi = rssi_down + rssi_up
         val_min = min(todos_rssi)
         val_max = max(todos_rssi)
@@ -158,7 +158,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             margem = 5
         ax1.set_ylim(val_min - margem, val_max + margem)
 
-    ax1.legend(fontsize=8)
+    #ax1.legend(fontsize=8)
     ax1.set_title("RSSI LoRa (Downlink / Uplink)", fontsize=10)
     ax1.set_ylabel("RSSI (dBm)")
     ax1.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
@@ -184,7 +184,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             color=cor_snr_up
         )
     if snr_down or snr_up:
-        ax2.legend(loc='upper right')
+        ax2.legend(loc='upper right', fontsize=8)
         todos_snr = snr_down + snr_up
         val_snr_min = min(todos_snr)
         val_snr_max = max(todos_snr)
@@ -193,7 +193,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             margem = 5
         ax2.set_ylim(val_snr_min - margem_snr, val_snr_max + margem_snr)
 
-    ax2.legend(fontsize=8)
+    #ax2.legend(fontsize=8)
     ax2.set_title("SNR LoRa (Downlink / Uplink)", fontsize=10)
     ax2.set_ylabel("SNR (dB)")
     ax2.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
@@ -209,7 +209,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             markersize=3,
             color=cor_psr
         )
-        ax3.legend(loc='upper right')
+        ax3.legend(loc='upper right', fontsize=8)
         val_min = min(psr)
         val_max = max(psr)
         margem = (val_max - val_min) * 0.10
@@ -217,7 +217,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             margem = 5
         ax3.set_ylim(max(0, val_min - margem), min(105, val_max + margem))
 
-    ax3.legend(fontsize=8)
+    #ax3.legend(fontsize=8)
     ax3.set_title("Packet Success Rate - PSR", fontsize=10)
     ax3.set_ylabel("PSR (%)")
     ax3.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
