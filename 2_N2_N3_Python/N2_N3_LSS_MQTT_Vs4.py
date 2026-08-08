@@ -22,7 +22,7 @@ global Tamanho_pacote, taxa_canal_teorica, taxa_canal_calculada, bitrate, perda_
 global medida_atual, numero_de_medidas, condicao_start, tempo_entre_medidas, perda_total, enlace_testado
 global recebe_valor_spreadingfactor, recebe_valor_bandwidth, recebe_valor_codingrate, recebe_valor_potencia_radio
 global comanda_mudar_radio, contador_pacote_DL, LSS_status, psr_geral, contador_reconfigura, confirma_mudar_radio
-global psrDL_geral, contador_perda_DL, ID_gateway, ID_sensor, Pacote_DL, pacote_recebido, estado_mqtt
+global psrDL_geral, contador_perda_DL, ID_gateway, ID_sensor, Pacote_DL, pacote_recebido, estado_mqtt, radio_configurado
 
 
 # ===== Configurações MQTT =====
@@ -50,6 +50,7 @@ condicao_start = 0
 medida_atual = 0
 enlace_testado = 0
 pacote_recebido = 0
+radio_configurado = 0
 
 #Camada Física
 # Variáveis Auxiliares
@@ -444,31 +445,25 @@ try:
 
           tempo_entre_medidas = valor_tempo
           
-          if ((valor_novo_spreadingfactor != valor_atual_spreadingfactor) or (valor_novo_bandwidth != valor_atual_bandwidth) or (valor_novo_codingrate != valor_atual_codingrate) or (valor_novo_potencia_radio != valor_atual_potencia_radio)):
+          #if ((valor_novo_spreadingfactor != valor_atual_spreadingfactor) or (valor_novo_bandwidth != valor_atual_bandwidth) or (valor_novo_codingrate != valor_atual_codingrate) or (valor_novo_potencia_radio != valor_atual_potencia_radio)):
+          if (medida_atual == 0):
              LSS_status = 3
              comanda_mudar_radio = 1
              confirma_mudar_radio = 1
              print("### LSS - Mudança de Configuração de Rádio Detectada")
              print("### LSS - Entrando em Modo Muda Config. Rádio LoRa ### ", comanda_mudar_radio)
              muda_radio_lora()
-
+             radio_configurado = 1
              inicia_lora_site_survey = 1
              comanda_mudar_radio = 4
              confirma_mudar_radio = 0
              LSS_status = 1
              time.sleep(1)
           else:
-             LSS_status = 3
-             comanda_mudar_radio = 1
-             confirma_mudar_radio = 1
-             print("### LSS - Configura novamente os parâmetros de Rádio LoRa")
-             print("### LSS - Entrando em Modo Muda Config. Rádio LoRa ### ", comanda_mudar_radio)
-             muda_radio_lora()
-             
              comanda_mudar_radio = 4 
              confirma_mudar_radio = 0
              LSS_status = 1
-             time.sleep(1)
+             
 
           if (medida_atual == 0):
               print("################## LSS - Iniciando Medições LoRa #################")
@@ -579,6 +574,7 @@ try:
              condicao_start = 0
              medida_atual = 0
              comanda_mudar_radio = 0
+             radio_configurado = 0
              inicia_lora_site_survey = 0
              confirma_mudar_radio = 0
              enlace_testado = 0
@@ -600,6 +596,7 @@ try:
          medida_atual = 0
          perda_geral = 0
          condicao_start = 0
+         radio_configurado = 0
          comanda_mudar_radio = 0
          confirma_mudar_radio = 0
          enlace_testado = 0
