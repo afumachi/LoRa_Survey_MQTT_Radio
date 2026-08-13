@@ -44,7 +44,7 @@ REFRESH_MAPA_MS = 2000
 # gráficas (Aplicação, Gerência, Gerência Completa, Taxas de Dados) usam
 # esse mesmo valor para decidir quantas das medidas mais recentes exibir.
 JANELA_AMOSTRAGEM_PADRAO = 5000
-MAX_PONTOS = 1000
+MAX_PONTOS = 100
 
 
 cor_rssi_down = "#1f77b4"
@@ -52,22 +52,27 @@ cor_rssi_up = "#ff7f0e"
 cor_snr_down = "#1f77b4"
 cor_snr_up = "#ff7f0e"
 cor_psr = "#2ca02c"
+cor_taxa_teorica = "#9467bd"
+cor_taxa_calculada = "#d62728"
 
 
 #Atualiza arquivo de Parâmetros
 pasta_parametros = os.path.join(dir_nivel4, 'PARAMETROS.txt')
 parametros = open(pasta_parametros, 'w')
-parametros.write("0\n0\n12\n125\n8\n20\n8\n0\n") 
+parametros.write("0\n0\n12\n125\n8\n20\n8\n0\n0\n") 
 parametros.close()
 
+estado_lss = "0"
 
 # ===================== ATUALIZA GRÁFICOS =====================
-def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down, label_up, label_snr_down, label_snr_up, label_psr):
+def atualizar_grafico(ax1, ax2, ax3, ax4, canvas1, canvas2, canvas3, canvas4, raiz, label_down, label_up, label_snr_down, label_snr_up, label_psr, label_taxa_teorica, label_taxa_calculada):
     rssi_down = []
     rssi_up = []
     snr_down = []
     snr_up = []   
     psr = []
+    taxa_teorica = []
+    taxa_calculada = []
 
     # ===================== RSSI =====================
     try:
@@ -103,12 +108,32 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
     except FileNotFoundError:
         pass
 
+    # ===================== TAXA DE CANAL (Teórica / Calculada) =====================
+    try:
+        with open("../3_N4_Armazenamento/Dados_Processados/taxa_dados.tmp", 'r') as f:
+            for linha in f:
+                linha = linha.strip()
+                if linha:
+                    try:
+                        partes = linha.split()
+                        t_teorica = partes[0].replace(",", ".")
+                        t_calculada = partes[1].replace(",", ".")
+                        if t_teorica != "None" and t_calculada != "None":
+                            taxa_teorica.append(float(t_teorica))
+                            taxa_calculada.append(float(t_calculada))
+                    except (ValueError, IndexError):
+                        pass
+    except FileNotFoundError:
+        pass
+
     # ===================== JANELA DESLIZANTE =====================
     rssi_down = rssi_down[-MAX_PONTOS:]
     rssi_up = rssi_up[-MAX_PONTOS:]
     snr_down = snr_down[-MAX_PONTOS:]
     snr_up = snr_up[-MAX_PONTOS:]    
     psr = psr[-MAX_PONTOS:]
+    taxa_teorica = taxa_teorica[-MAX_PONTOS:]
+    taxa_calculada = taxa_calculada[-MAX_PONTOS:]
 
     # ===================== LABELS =====================
     if rssi_down:
@@ -136,6 +161,16 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
     else:
         label_psr.config(text="PSR atual: --")
 
+    if taxa_teorica:
+        label_taxa_teorica.config(text="Taxa Teórica atual: " + str(round(taxa_teorica[-1],2)) + " bps")
+    else:
+        label_taxa_teorica.config(text="Taxa Teórica atual: --")
+
+    if taxa_calculada:
+        label_taxa_calculada.config(text="Taxa Real atual: " + str(round(taxa_calculada[-1],2)) + " bps")
+    else:
+        label_taxa_calculada.config(text="Taxa Real atual: --")
+
     # ===================== GRÁFICO RSSI =====================
     ax1.clear()
     if rssi_down:
@@ -144,7 +179,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             label="RSSI Downlink (dBm)",
             linewidth=1.5,
             marker='o',
-            markersize=3,
+            markersize=2,
             color=cor_rssi_down
         )
     if rssi_up:
@@ -153,7 +188,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             label="RSSI Uplink (dBm)",
             linewidth=1.5,
             marker='s',
-            markersize=3,
+            markersize=2,
             color=cor_rssi_up
         )
     if rssi_down or rssi_up:
@@ -166,10 +201,12 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             margem = 5
         ax1.set_ylim(val_min - margem, val_max + margem)
 
-    #ax1.legend(fontsize=8)
-    ax1.set_title("RSSI LoRa (Downlink / Uplink)", fontsize=10)
-    ax1.set_ylabel("RSSI (dBm)")
-    ax1.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
+
+    ax1.set_title("RSSI LoRa (Downlink / Uplink)", fontsize=9)
+    ax1.set_ylabel("RSSI (dBm)", fontsize=9)
+    #ax1.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
+    # Altera o tamanho da fonte dos números/escala em ambos os eixos (X e Y)
+    ax1.tick_params(axis='both', labelsize=7)    
 
     # ===================== GRÁFICO SNR =====================
     ax2.clear()
@@ -179,7 +216,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             label="SNR Downlink (dBm)",
             linewidth=1.5,
             marker='o',
-            markersize=3,
+            markersize=2,
             color=cor_snr_down
         )
     if snr_up:
@@ -188,7 +225,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             label="SNR Uplink (dBm)",
             linewidth=1.5,
             marker='s',
-            markersize=3,
+            markersize=2,
             color=cor_snr_up
         )
     if snr_down or snr_up:
@@ -197,15 +234,15 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
         val_snr_min = min(todos_snr)
         val_snr_max = max(todos_snr)
         margem_snr = (val_snr_max - val_snr_min) * 0.10
-        if margem == 0:
-            margem = 5
+        if margem_snr == 0:
+            margem_snr = 5
         ax2.set_ylim(val_snr_min - margem_snr, val_snr_max + margem_snr)
 
-    #ax2.legend(fontsize=8)
-    ax2.set_title("SNR LoRa (Downlink / Uplink)", fontsize=10)
-    ax2.set_ylabel("SNR (dB)")
-    ax2.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
-
+    ax2.set_title("SNR LoRa (Downlink / Uplink)", fontsize=9)
+    ax2.set_ylabel("SNR (dB)", fontsize=9)
+    #ax2.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
+    # Altera o tamanho da fonte dos números/escala em ambos os eixos (X e Y)
+    ax2.tick_params(axis='both', labelsize=7)    
     # ===================== GRÁFICO PSR =====================
     ax3.clear()
     if psr:
@@ -214,7 +251,7 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             label="PSR (%)",
             linewidth=1.5,
             marker='o',
-            markersize=3,
+            markersize=2,
             color=cor_psr
         )
         ax3.legend(loc='upper right', fontsize=8)
@@ -225,30 +262,87 @@ def atualizar_grafico(ax1, ax2, ax3, canvas1, canvas2, canvas3, raiz, label_down
             margem = 5
         ax3.set_ylim(max(0, val_min - margem), min(105, val_max + margem))
 
-    #ax3.legend(fontsize=8)
-    ax3.set_title("Packet Success Rate - PSR", fontsize=10)
-    ax3.set_ylabel("PSR (%)")
-    ax3.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
+    ax3.set_title("Packet Success Rate - PSR", fontsize=9)
+    ax3.set_ylabel("PSR (%)", fontsize=9)
+    #ax3.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
+    # Altera o tamanho da fonte dos números/escala em ambos os eixos (X e Y)
+    ax3.tick_params(axis='both', labelsize=7)   
+
+    # ===================== GRÁFICO TAXA DE DADOS (Teórica x Real) =====================
+    ax4.clear()
+    if taxa_teorica:
+        ax4.plot(
+            taxa_teorica,
+            label="Taxa Teórica (bps)",
+            linewidth=1.5,
+            marker='o',
+            markersize=2,
+            color=cor_taxa_teorica
+        )
+    if taxa_calculada:
+        ax4.plot(
+            taxa_calculada,
+            label="Taxa Real (bps)",
+            linewidth=1.5,
+            marker='s',
+            markersize=2,
+            color=cor_taxa_calculada
+        )
+    if taxa_teorica or taxa_calculada:
+        ax4.legend(loc='upper right', fontsize=8)
+        todas_taxas = taxa_teorica + taxa_calculada
+        val_min = min(todas_taxas)
+        val_max = max(todas_taxas)
+        margem = (val_max - val_min) * 0.10
+        if margem == 0:
+            margem = 5
+        ax4.set_ylim(max(0, val_min - margem), val_max + margem)
+
+    ax4.set_title("Taxa de Canal LoRa - Teórica x Real", fontsize=9)
+    ax4.set_ylabel("Taxa (bps)", fontsize=9)
+    #ax4.set_xlabel("Últimas " + str(MAX_PONTOS) + " medidas")
+    # Altera o tamanho da fonte dos números/escala em ambos os eixos (X e Y)
+    ax4.tick_params(axis='both', labelsize=7)
 
     # ===================== ATUALIZA =====================
     canvas1.draw()
     canvas2.draw()
     canvas3.draw()
-    raiz.after(1000,atualizar_grafico,ax1,ax2,ax3,canvas1,canvas2,canvas3,raiz,label_down,label_up,label_snr_down,label_snr_up,label_psr)
+    canvas4.draw()
+    raiz.after(1000,atualizar_grafico,ax1,ax2,ax3,ax4,canvas1,canvas2,canvas3,canvas4,raiz,label_down,label_up,label_snr_down,label_snr_up,label_psr,label_taxa_teorica,label_taxa_calculada)
 
 # ===================== BOTÕES =====================
-def salvar(fig1, fig2, fig3):
+def salvar(fig1, fig2, fig3=None, fig4=None):
     arquivo = tkFileDialog.asksaveasfilename(defaultextension=".png")
     if arquivo:
         fig1.savefig(arquivo.replace(".png","_rssi.png"))
         fig2.savefig(arquivo.replace(".png","_snr.png"))
-        fig3.savefig(arquivo.replace(".png","_psr.png"))
+        if fig3 is not None:
+            fig3.savefig(arquivo.replace(".png","_psr.png"))
+        if fig4 is not None:
+            fig4.savefig(arquivo.replace(".png","_taxa.png"))
+
 
 # ===================== INTERFACE =====================
 raiz = Tk()
 raiz.title("FEE230 - NÍVEL 6 - GERÊNCIA LORA")
 raiz.geometry("1350x980")
 raiz.resizable(True, True)
+
+# Abre a janela já maximizada. Isso evita que, nas abas "Gerência de Rede
+# LoRa" e "Taxas de Dados / PSR" (que empilham dois gráficos cada), o
+# segundo gráfico fique cortado/invisível no tamanho fixo inicial
+# (1350x980) — problema que só desaparecia ao maximizar manualmente a
+# janela. "zoomed" é o estado nativo do Windows; em outras plataformas
+# (Linux/Mac) cai no fallback do atributo "-zoomed" e, se nenhum dos dois
+# funcionar, mantém a geometria fixa acima.
+try:
+    raiz.state('zoomed')
+except Exception:
+    try:
+        raiz.attributes('-zoomed', True)
+    except Exception:
+        pass
 
 
 # =============================================================================
@@ -259,7 +353,7 @@ notebook.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
 # Estilo das abas
 style_ttk = ttk.Style()
-style_ttk.configure("TNotebook.Tab", font=("Arial", 12, "bold"), padding=[12, 6])
+style_ttk.configure("TNotebook.Tab", font=("Arial", 10, "bold"), padding=[12, 6])
 
 
 # =============================================================================
@@ -328,10 +422,10 @@ valor_potencia_radio.insert(0, "20")
 
 # Status
 status_texto_ger = StringVar()
-status_texto_ger.set("AGUARDANDO...")
+status_texto_ger.set("LoRa Site Survey - TESTE PARADO")
 label_status_ger = Label(reg_parametrizacao, textvariable=status_texto_ger,
-                         font=("Arial", 10, "bold"), fg="gray", bg="#F0F0F0")
-label_status_ger.place(x=25, y=300)
+                         font=("Arial", 10, "bold"), fg="red", bg="#F0F0F0")
+label_status_ger.place(x=20, y=300)
 
 
 
@@ -387,19 +481,20 @@ def grava_comandos(condicao_start):
     s.write(str(captura_num_codingrate()) + "\n")
     s.write(str(captura_num_potencia_radio()) + "\n")
     s.write(str(captura_num_tempo_tx_rx()) + "\n")
+    s.write(str("0") + "\n")
     s.close()
 
 
 def iniciar_teste():
     grava_comandos(1)
-    status_texto_ger.set("LoRa Site Survey - Iniciado")
-    label_status_ger.config(fg="red")
+    #status_texto_ger.set("LoRa Site Survey - Iniciado")
+    #label_status_ger.config(fg="green")
 
 
 def parar_teste():
     grava_comandos(0)
-    status_texto_ger.set("LoRa Site Survey - Parado")
-    label_status_ger.config(fg="red")
+    #status_texto_ger.set("LoRa Site Survey - Parado")
+    #label_status_ger.config(fg="red")
 
 
 btn_iniciar = Button(reg_parametrizacao, text="INICIAR", font=("Arial", 12, "bold"), width=10, command=iniciar_teste)
@@ -550,28 +645,45 @@ def atualizar_texto_estatisticas():
     texto_estatisticas.insert("1.0", "\n".join(linhas_texto))
     texto_estatisticas.config(state="disabled")
 
+
+
+    path_param = os.path.join(dir_nivel4, 'PARAMETROS.txt')
+    if os.path.exists(path_param):
+        try:
+            # Leitura
+            with open(path_param, 'r') as f:
+                linhas = [linha.strip() for linha in f.readlines()]
+
+            # Ler a 7ª linha (índice 6):
+            estado_lss = linhas[7]
+            #print(f"Estado LSS: {estado_lss}")
+
+
+            if estado_lss == "0":
+                status_texto_ger.set("LoRa Site Survey - TESTE PARADO")
+                label_status_ger.config(fg="red")
+            elif estado_lss == "1":
+                status_texto_ger.set("LoRa Site Survey - CONFIG RADIO")
+                label_status_ger.config(fg="blue")
+            elif estado_lss == "3":
+                status_texto_ger.set("LoRa Site Survey - TESTE ENLACE")
+                label_status_ger.config(fg="blue")
+            elif estado_lss == "4":
+                status_texto_ger.set("LoRa Site Survey - EM ANDAMENTO")
+                label_status_ger.config(fg="green")
+            elif estado_lss == "5":
+                status_texto_ger.set("LoRa Site Survey - ÚLTIMO")
+                label_status_ger.config(fg="green")
+                
+        except Exception:
+            pass
+
+
+
     raiz.after(REFRESH_MS, atualizar_texto_estatisticas)
 
 
 atualizar_texto_estatisticas()
-
-
-path_param = os.path.join(dir_nivel4, 'PARAMETROS.txt')
-if os.path.exists(path_param):
-    try:
-        pp = open(path_param, 'r')
-        status_lido = pp.readline().strip()
-        pp.close()
-        if status_lido == '0':
-            status_texto_ger.set("LoRa Site Survey - Wisstek-IoT")
-            label_status_ger.config(fg="red")
-            pp.close()
-        #if lss_status == "0":
-        #    lss_status_texto.set("LSS PARADO")
-        #    label_lss_status.config(fg="green")
-    except Exception:
-        pass
-
 
 # =============================================================================
 # AMOSTRAGEM DE PACOTES DL/UL - MONITORAMENTO DO TESTE EM ANDAMENTO
@@ -740,7 +852,7 @@ frame_labels_rssi.pack(fill="x", padx=10, pady=(10,5))
 label_down = Label(
     frame_labels_rssi,
     text="RSSI DL atual: --",
-    font=("Arial",10,"bold"),
+    font=("Arial",9,"bold"),
     bg=cor_rssi_down,
     fg="white",
     relief="ridge",
@@ -753,7 +865,7 @@ label_down.pack(side="left", padx=5)
 label_up = Label(
     frame_labels_rssi,
     text="RSSI UL atual: --",
-    font=("Arial",10,"bold"),
+    font=("Arial",9,"bold"),
     bg=cor_rssi_up,
     fg="white",
     relief="ridge",
@@ -767,7 +879,7 @@ label_up.pack(side="left", padx=5)
 btn = Button(
     frame_labels_rssi,
     text="Salvar Gráficos",
-    command=lambda: salvar(fig1, fig2, fig3)
+    command=lambda: salvar(fig1, fig2)
 )
 btn.pack(side="right", pady=5)
 
@@ -788,7 +900,7 @@ frame_labels_snr.pack(fill="x", padx=10, pady=(10,5))
 label_snr_down = Label(
     frame_labels_snr,
     text="SNR DL atual: --",
-    font=("Arial",10,"bold"),
+    font=("Arial",9,"bold"),
     bg=cor_snr_down,
     fg="white",
     relief="ridge",
@@ -801,7 +913,7 @@ label_snr_down.pack(side="left", padx=5)
 label_snr_up = Label(
     frame_labels_snr,
     text="SNR UL atual: --",
-    font=("Arial",10,"bold"),
+    font=("Arial",9,"bold"),
     bg=cor_snr_up,
     fg="white",
     relief="ridge",
@@ -821,14 +933,21 @@ ax2 = fig2.add_subplot(111)
 canvas2 = FigureCanvasTkAgg(fig2, master=frame_snr)
 canvas2.get_tk_widget().pack(fill="both", expand=True)
 
+# =============================================================================
+# ABA 3: TAXAS DE DADOS / PSR (PSR movida da aba de Gerência de Rede LoRa +
+# novo gráfico com a Taxa de Canal Teórica x Real, calculadas pelo Nível 5)
+# =============================================================================
+aba_taxas = Frame(notebook, bg="#F0F0F0")
+notebook.add(aba_taxas, text="  📊 Taxas de Dados / PSR  ")
+
 # ===================== LABEL DA PSR =====================
-frame_label_psr = Frame(aba_gerencia_completa)
-frame_label_psr.pack(fill="x", padx=10, pady=5)
+frame_label_psr = Frame(aba_taxas)
+frame_label_psr.pack(fill="x", padx=10, pady=(10,5))
 
 label_psr = Label(
     frame_label_psr,
     text="PSR atual: --",
-    font=("Arial",10,"bold"),
+    font=("Arial",9,"bold"),
     bg=cor_psr,
     fg="white",
     relief="ridge",
@@ -838,8 +957,16 @@ label_psr = Label(
 )
 label_psr.pack(side="left", padx=5)
 
+# ===================== BOTÃO SALVAR (Aba Taxas de Dados / PSR) =====================
+btn_taxas = Button(
+    frame_label_psr,
+    text="Salvar Gráficos",
+    command=lambda: salvar(fig1, fig2, fig3, fig4)
+)
+btn_taxas.pack(side="right", pady=5)
+
 # ===================== GRÁFICO DA PSR =====================
-frame_psr = Frame(aba_gerencia_completa)
+frame_psr = Frame(aba_taxas)
 frame_psr.pack(fill="both", expand=True, padx=10, pady=5)
 
 fig3 = Figure(figsize=(10,1.8))
@@ -848,9 +975,48 @@ ax3 = fig3.add_subplot(111)
 canvas3 = FigureCanvasTkAgg(fig3, master=frame_psr)
 canvas3.get_tk_widget().pack(fill="both", expand=True)
 
+# ===================== LABELS DA TAXA DE DADOS =====================
+frame_labels_taxa = Frame(aba_taxas)
+frame_labels_taxa.pack(fill="x", padx=10, pady=(10,5))
 
-atualizar_grafico(ax1,ax2,ax3,canvas1,canvas2,canvas3,raiz,label_down,label_up,label_snr_down,label_snr_up,label_psr)
+label_taxa_teorica = Label(
+    frame_labels_taxa,
+    text="Taxa Teórica atual: --",
+    font=("Arial",9,"bold"),
+    bg=cor_taxa_teorica,
+    fg="white",
+    relief="ridge",
+    bd=3,
+    width=25,
+    pady=4
+)
+label_taxa_teorica.pack(side="left", padx=5)
 
+label_taxa_calculada = Label(
+    frame_labels_taxa,
+    text="Taxa Real atual: --",
+    font=("Arial",9,"bold"),
+    bg=cor_taxa_calculada,
+    fg="white",
+    relief="ridge",
+    bd=3,
+    width=25,
+    pady=4
+)
+label_taxa_calculada.pack(side="left", padx=5)
+
+# ===================== GRÁFICO DA TAXA DE DADOS (Teórica x Real) =====================
+frame_taxa = Frame(aba_taxas)
+frame_taxa.pack(fill="both", expand=True, padx=10, pady=5)
+
+fig4 = Figure(figsize=(10,1.8))
+ax4 = fig4.add_subplot(111)
+
+canvas4 = FigureCanvasTkAgg(fig4, master=frame_taxa)
+canvas4.get_tk_widget().pack(fill="both", expand=True)
+
+
+atualizar_grafico(ax1,ax2,ax3,ax4,canvas1,canvas2,canvas3,canvas4,raiz,label_down,label_up,label_snr_down,label_snr_up,label_psr,label_taxa_teorica,label_taxa_calculada)
 
 # =============================================================================
 # CALLBACK DE FECHAR JANELA

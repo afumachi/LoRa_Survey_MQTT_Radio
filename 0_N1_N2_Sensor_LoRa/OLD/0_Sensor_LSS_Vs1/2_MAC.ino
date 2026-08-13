@@ -2,13 +2,11 @@
 void Mac_radio_receive_DL() { 
   // Aqui pode ser adicionado o Sleep Mode
 
-  //tempo_radio = PacoteDL[MAC3_TEMPO]; // Byte DL[6] Recebe tempo de radio tx rx
-  //recebe_comando_nova_radio = PacoteDL[MAC4_COMANDO]; // Byte DL[7] Recebe comando de reconfiguração de Rádio LoRa
   contadorSS = (((PacoteDL[MAC_COUNTER_MSB])*256) + (PacoteDL[MAC_COUNTER_LSB]));
 
   // Primeiro ciclo
     if ((recebe_comando_nova_radio == 1)){
-      //& ((valor_novo_spreadingfactor != valor_atual_spreadingfactor) || (valor_novo_bandwidth != valor_atual_bandwidth) || (valor_novo_codingrate != valor_atual_codingrate) || (valor_novo_potencia_radio != valor_atual_potencia_radio))){
+     
         Serial.println("[RECONFIGURACAO DE RADIO RECEBIDO]");
         confirma_novo_radio_sensor = 2;
         
@@ -23,11 +21,10 @@ void Mac_radio_receive_DL() {
         valor_atual_potencia_radio = valor_novo_potencia_radio;
 
     }
-    //era 3
+
     if (recebe_comando_nova_radio == 3){
       Serial.println("[TESTE ENLACE RECEBIDO]");
       confirma_novo_radio_sensor = 3;
-      //Serial.print("MAC Sensor - Confirma CICLO SITE SURVEY");
     }
     if (recebe_comando_nova_radio == 4){
       Serial.println("[LSS EM ANDAMENTO]");
@@ -46,7 +43,6 @@ void Mac_radio_receive_DL() {
 void Mac_radio_send_UL() {
   // Aqui pode ser adicionado o Sleep Mode
 
-  // Caso Nó Sensor Devices recebeu comando de alteração de config. de rádio escreve no Byte[11] para a Base LoRa
   // confirmação do primeiro ciclo  
   if (confirma_novo_radio_sensor == 1){
     PacoteUL[MAC4_COMANDO] = 1;
