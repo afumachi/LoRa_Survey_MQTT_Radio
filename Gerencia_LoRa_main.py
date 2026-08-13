@@ -37,14 +37,15 @@ def iniciar_processo(nome, caminho_relativo):
     return processo, log_file, log_path
 
 
-# 1. Inicia o primeiro processo em segundo plano (N6 - Exibição)
-p1, log1, path1 = iniciar_processo("N6", "5_N6_Exibição/N6_Gerencia_SNR_Radio_Vs7.py")
 
 # 2. Inicia o segundo processo em segundo plano (N2_N3 - MQTT)
-p2, log2, path2 = iniciar_processo("N2_N3", "2_N2_N3_Python/N2_N3_LSS_MQTT_Vs4.py")
+p1, log1, path1 = iniciar_processo("N2_N3", "2_N2_N3_Python/N2_N3_LSS_MQTT_Vs5.py")
+
+# 1. Inicia o primeiro processo em segundo plano (N6 - Exibição)
+p2, log2, path2 = iniciar_processo("N6", "5_N6_Exibição/N6_Gerencia_SNR_Radio_Vs9.py")
 
 # 3. Inicia o terceiro processo em segundo plano (N5 - Processamento)
-p3, log3, path3 = iniciar_processo("N5", "4_N5_Processamento/N5_Gerencia_SNR_Vs3.py")
+p3, log3, path3 = iniciar_processo("N5", "4_N5_Processamento/N5_Gerencia_SNR_Vs5.py")
 
 print("Script principal e subprocessos iniciados com sucesso!")
 print(f"Logs sendo gravados em: {log_dir}\n")
@@ -53,7 +54,7 @@ print(f"Logs sendo gravados em: {log_dir}\n")
 # (ex.: erro de import, arquivo não encontrado, porta MQTT indisponível, etc.)
 time.sleep(2)
 
-processos = [("N6", p1, path1), ("N2_N3", p2, path2), ("N5", p3, path3)]
+processos = [("N2_N3", p1, path1), ("N6", p2, path2), ("N5", p3, path3)]
 
 algum_falhou = False
 for nome, p, log_path in processos:
@@ -89,10 +90,10 @@ try:
                 processos = [item for item in processos if item[1] is not p]
 except KeyboardInterrupt:
     print("\nEncerrando todos os processos...")
-    for nome, p, _ in [("N6", p1, path1), ("N2_N3", p2, path2), ("N5", p3, path3)]:
+    for nome, p, _ in [("N2_N3", p1, path1), ("N6", p2, path2), ("N5", p3, path3)]:
         if p.poll() is None:
             p.terminate()
-    for nome, p, _ in [("N6", p1, path1), ("N2_N3", p2, path2), ("N5", p3, path3)]:
+    for nome, p, _ in [("N2_N3", p1, path1), ("N6", p2, path2), ("N5", p3, path3)]:
         try:
             p.wait(timeout=5)
         except subprocess.TimeoutExpired:
