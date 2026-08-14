@@ -128,6 +128,20 @@ parametros = open(pasta_parametros, 'w')
 parametros.write("0\n0\n12\n125\n8\n20\n8\n0\n0\n") 
 parametros.close()
 
+
+arquivo_cmd_lora = 'cmd_lora.txt'
+caminho_cmd_lora = os.path.join(caminho_parametros, arquivo_cmd_lora)
+parametros_cmd = open(caminho_cmd_lora, 'w')
+parametros_cmd.write("0\n0\n") 
+parametros_cmd.close()
+
+
+# Conteúdo de 2 linhas para escrever
+linhas_conteudo = [
+    "linha1: parametros_radio_01\n",
+    "linha2: parametros_radio_02\n"
+]
+
 # ===== Callbacks MQTT
 def on_connect(client, userdata, flags, reason_code, properties):
     global estado_mqtt
@@ -266,13 +280,13 @@ def downlink():
    print("### DOWNLINK ### MÁQUINA ESTADO LORA: ", comanda_mudar_radio)
 
 
-   with open(pasta_parametros, 'r') as f:
+   with open(caminho_cmd_lora, 'r') as f:
        linhas = f.readlines()
 
-   # Altera a 7ª linha (índice 6)
-   linhas[7] = f"{estado_lss}\n"
+   # Altera a 1ª linha (índice 0)
+   linhas[0] = f"{estado_lss}\n"
 
-   with open(pasta_parametros, 'w') as f:
+   with open(caminho_cmd_lora, 'w') as f:
        f.writelines(linhas)
 
 
@@ -333,6 +347,16 @@ def uplink():
                           
          # Camada MAC
          confirma_mudar_radio = Pacote_UL[7]
+
+         with open(caminho_cmd_lora, 'r') as f:
+             linhas2 = f.readlines()
+
+         # Altera a 2ª linha (índice 1)
+         linhas2[1] = f"{confirma_mudar_radio}\n"
+
+         with open(caminho_cmd_lora, 'w') as f:
+             f.writelines(linhas2)
+         
          pacote_recebido = 1
    else: 
       pacote_recebido = 0

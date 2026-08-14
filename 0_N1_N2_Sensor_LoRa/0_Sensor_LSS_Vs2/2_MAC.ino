@@ -28,7 +28,7 @@ void Mac_radio_receive_DL() {
     }
     if (recebe_comando_nova_radio == 4){
       //Serial.println("[LSS EM ANDAMENTO]");
-      confirma_novo_radio_base = 4;
+      confirma_novo_radio_sensor = 4;
     }    
     if (recebe_comando_nova_radio == 5){
       //Serial.println("[LSS - ÚLTIMO PACOTE]");
@@ -70,7 +70,7 @@ void Mac_radio_send_UL() {
   }
   else if (confirma_novo_radio_sensor == 4){
     //  Confirmação do terceiro ciclo confirmando a alteração das config. de rádio do Nó Sensor
-    PacoteUL[MAC4_COMANDO] = 4;
+    PacoteUL[7] = 4;
     Serial.println("MAC - PacoteUL[7] - CICLO SITE SURVEY: ");
     //Serial.println(confirma_novo_radio_sensor);
     recebe_comando_nova_radio = 0;

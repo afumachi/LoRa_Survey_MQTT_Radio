@@ -44,7 +44,7 @@ REFRESH_MAPA_MS = 2000
 # gráficas (Aplicação, Gerência, Gerência Completa, Taxas de Dados) usam
 # esse mesmo valor para decidir quantas das medidas mais recentes exibir.
 JANELA_AMOSTRAGEM_PADRAO = 5000
-MAX_PONTOS = 100
+MAX_PONTOS = 10000
 
 
 cor_rssi_down = "#1f77b4"
@@ -420,14 +420,20 @@ valor_potencia_radio = Entry(reg_parametrizacao, width=10, font=("Arial", 12))
 valor_potencia_radio.place(x=170, y=215)
 valor_potencia_radio.insert(0, "20")
 
-# Status
+# Status CMD LORA RADIO
 status_texto_ger = StringVar()
-status_texto_ger.set("LoRa Site Survey - TESTE PARADO")
+status_texto_ger.set("LoRa Site Survey - COMANDO PARADO")
 label_status_ger = Label(reg_parametrizacao, textvariable=status_texto_ger,
                          font=("Arial", 10, "bold"), fg="red", bg="#F0F0F0")
-label_status_ger.place(x=20, y=300)
+label_status_ger.place(x=15, y=300)
 
 
+# Status REDE LORA RADIO
+status_texto_ger2 = StringVar()
+status_texto_ger2.set("LoRa Site Survey - ESTADO PARADO")
+label_status_ger2 = Label(reg_parametrizacao, textvariable=status_texto_ger2,
+                         font=("Arial", 10, "bold"), fg="red", bg="#F0F0F0")
+label_status_ger2.place(x=15, y=320)
 
 # --- FUNÇÕES DE CAPTURA E GRAVAÇÃO ---
 def captura_num_medidas():
@@ -647,34 +653,63 @@ def atualizar_texto_estatisticas():
 
 
 
-    path_param = os.path.join(dir_nivel4, 'PARAMETROS.txt')
+    path_param = os.path.join(dir_nivel4, 'cmd_lora.txt')
     if os.path.exists(path_param):
         try:
             # Leitura
             with open(path_param, 'r') as f:
                 linhas = [linha.strip() for linha in f.readlines()]
 
-            # Ler a 7ª linha (índice 6):
-            estado_lss = linhas[7]
+            # Ler a 1ª linha (índice 0):
+            cmd_lss = linhas[0] if len(linhas) > 0 else "0"
+            estado_lss = linhas[1] if len(linhas) > 0 else "0"
+            
             #print(f"Estado LSS: {estado_lss}")
 
 
-            if estado_lss == "0":
+            if cmd_lss == "0":
                 status_texto_ger.set("LoRa Site Survey - TESTE PARADO")
                 label_status_ger.config(fg="red")
+            elif cmd_lss == "1":
+                status_texto_ger.set("LoRa Site Survey - CMD CONFIG RADIO")
+                label_status_ger.config(fg="blue")
+            elif cmd_lss == "3":
+                status_texto_ger.set("LoRa Site Survey - CMD TESTE ENLACE")
+                label_status_ger.config(fg="blue")
+            elif cmd_lss == "4":
+                status_texto_ger.set("LoRa Site Survey - LSS EM ANDAMENTO")
+                label_status_ger.config(fg="green")
+            elif cmd_lss == "5":
+                status_texto_ger.set("LoRa Site Survey - ENVIA ÚLTIMO PKT")
+                label_status_ger.config(fg="green")
+            elif cmd_lss == "10":
+                status_texto_ger.set("LoRa Site Survey - CMD GATEWAY MAX")
+                label_status_ger.config(fg="blue")
+
+
+            if estado_lss == "0":
+                status_texto_ger2.set("LoRa Site Survey - ESTADO PARADO")
+                label_status_ger2.config(fg="red")
             elif estado_lss == "1":
-                status_texto_ger.set("LoRa Site Survey - CONFIG RADIO")
-                label_status_ger.config(fg="blue")
+                status_texto_ger2.set("LoRa Site Survey - ERRO CONFIG RADIO")
+                label_status_ger2.config(fg="blue")
             elif estado_lss == "3":
-                status_texto_ger.set("LoRa Site Survey - TESTE ENLACE")
-                label_status_ger.config(fg="blue")
+                status_texto_ger2.set("LoRa Site Survey - RADIO CONFIGURADO")
+                label_status_ger2.config(fg="blue")
             elif estado_lss == "4":
-                status_texto_ger.set("LoRa Site Survey - EM ANDAMENTO")
-                label_status_ger.config(fg="green")
+                status_texto_ger2.set("LoRa Site Survey - TESTE ENLACE OK")
+                label_status_ger2.config(fg="blue")
             elif estado_lss == "5":
-                status_texto_ger.set("LoRa Site Survey - ÚLTIMO")
-                label_status_ger.config(fg="green")
-                
+                status_texto_ger2.set("LoRa Site Survey - ÚLTIMO PKT UL OK")
+                label_status_ger2.config(fg="green")
+            elif estado_lss == "6":
+                status_texto_ger2.set("LoRa Site Survey - PACOTE UL RECEBIDO")
+                label_status_ger2.config(fg="green")
+            elif estado_lss == "10":
+                status_texto_ger2.set("LoRa Site Survey - GATEWAY MAX OK")
+                label_status_ger2.config(fg="blue")
+
+
         except Exception:
             pass
 
