@@ -24,7 +24,7 @@ void Transp_radio_receive_DL() {
 
 //================ ENVIA O PACOTE DE UL À CAMADA DE REDE ========
 void Transp_radio_send_UL() { 
-  if (confirma_novo_radio_base == 4){ 
+  if (recebe_comando_nova_radio == 4){ 
     contadorUL = contadorUL + 1;  // Incrementa o contador de pacote de UL
   }
 
