@@ -5,7 +5,7 @@ void Transp_radio_receive_DL() {
   
   unsigned long tempo_pacoteDL_ms = (unsigned long)tempo_radio * 2UL * 1000UL; // 2x o valor recebido em MAC3_TEMPO
 
-  if ((confirma_novo_radio_base == 4) || (confirma_novo_radio_base == 5)){ 
+  if ((recebe_comando_nova_radio == 4) || (recebe_comando_nova_radio == 5)){ 
 
     if ((millis() - millis_contador_DL) >= tempo_pacoteDL_ms) {
       contador_perda_DL = contador_perda_DL + 1;  // Incrementa o contador de perda de pacote de DL
