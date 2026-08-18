@@ -328,6 +328,9 @@ def downlink():
       medidas = 0
       client.disconnect()
       print("[MQTT] Reconectando ao broker...")
+      client.disconnect()
+      client.connect(BROKER, PORTA_MQTT, keepalive=60)
+      client.loop_start()   # Thread de fundo para receber mensagens       
       client.reconnect()
 
 
@@ -422,6 +425,12 @@ print("\n========== Gateway LoRa - Comunicação MQTT ==========")
 try:
     while True:
 
+      # Caso MQTT desconectado - Reconectar
+      if estado_mqtt != 1:
+         client.disconnect()
+         client.connect(BROKER, PORTA_MQTT, keepalive=60)
+         client.loop_start()   # Thread de fundo para receber mensagens
+         
       # Leitura constante do arquivo de parâmetros do Usuário Nível 6
       path_param = os.path.join(dir_nivel4, 'PARAMETROS.txt')
       if os.path.exists(path_param):
@@ -644,11 +653,6 @@ try:
          print("LSS pausado")
          time.sleep(2)
 
-      # Caso MQTT desconectado - Reconectar
-      if estado_mqtt != 1:
-         client.disconnect()
-         print("[MQTT] Reconectando ao broker...")      
-         client.reconnect()   
          
 # Interrompe a aplicação N2_N3 e a conexão com MQTT
 except KeyboardInterrupt:

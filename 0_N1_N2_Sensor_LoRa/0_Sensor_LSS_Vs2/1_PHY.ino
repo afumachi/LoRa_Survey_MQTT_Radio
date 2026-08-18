@@ -202,8 +202,8 @@ void reset_para_setup_inicial() {
   confirma_novo_radio_base = 0;
   confirma_novo_radio = 0;
   contador_perda_DL = 0;
-  //contadorUL = 0;
-  //contadorDL = 0;
+  contadorUL = 0;
+  contadorDL = 0;
   // Retorna rádio aos parâmetros de SETUP (primeiro_setup = 1 dispara o bloco de SETUP em Phy_radio_receive_DL)
   primeiro_setup = 1;
 }
