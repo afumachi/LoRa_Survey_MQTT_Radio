@@ -153,6 +153,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
     else:
         print(f"[MQTT] Falha na conexão. Código: {reason_code}")
         estado_mqtt = 0
+        client.reconnect()
 
 def on_publish(client, userdata, mid, reason_code, properties):
     """Confirmação de entrega (PUBACK) do pacote DL publicado em QoS1."""
@@ -323,6 +324,7 @@ def downlink():
    else:
       print("[MQTT] Não foi possível publicar. Cliente desconectado.")
       # Inserir Lógica de contingência se o cliente já estiver deslogado
+      estado_mqtt = 0
       medidas = 0
       client.disconnect()
       print("[MQTT] Reconectando ao broker...")
@@ -445,7 +447,6 @@ try:
       valor_novo_bandwidth = recebe_valor_bandwidth
       valor_novo_codingrate = recebe_valor_codingrate
       valor_novo_potencia_radio = recebe_valor_potencia_radio     
-
        
       if (condicao_start == 1):
                        
@@ -521,11 +522,7 @@ try:
               print("### LSS - Medida: ",medida_atual, "de ",numero_de_medidas)
 
               if ((medida_atual) == (numero_de_medidas)):
-                  comanda_mudar_radio = 5
-
-              # Caso MQTT desconectado - Reconectar
-              if estado_mqtt != 1:
-                  client.reconnect()      
+                  comanda_mudar_radio = 5  
 
               # =============== Camada de aplicação DL
               Comando_LED_amarelo = 0  # Inicia apagado
@@ -647,6 +644,11 @@ try:
          print("LSS pausado")
          time.sleep(2)
 
+      # Caso MQTT desconectado - Reconectar
+      if estado_mqtt != 1:
+         client.disconnect()
+         print("[MQTT] Reconectando ao broker...")      
+         client.reconnect()   
          
 # Interrompe a aplicação N2_N3 e a conexão com MQTT
 except KeyboardInterrupt:
