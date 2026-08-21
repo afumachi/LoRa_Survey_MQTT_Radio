@@ -85,7 +85,7 @@ def calcula_toa_taxa_canal(spreading_factor, bandwidth_khz, coding_rate, tamanho
     # Taxa de bits teórica
     taxa_teorica = spreading_factor * (bandwidth_hz / (2**spreading_factor)) * cr   
 
-    return toa_ms, round(taxa_teorica, 2)
+    return toa_ms, round(taxa_teorica, 3)
 
 
 def calcula_taxa_canal(spreading_factor, bandwidth_khz, coding_rate, psr_percentual):
@@ -93,7 +93,7 @@ def calcula_taxa_canal(spreading_factor, bandwidth_khz, coding_rate, psr_percent
     (via ToA) e a Taxa de Canal Calculada (real), que é a taxa teórica
     ponderada pela PSR (Packet Success Rate) até o pacote em questão."""
     _, taxa_teorica = calcula_toa_taxa_canal(spreading_factor, bandwidth_khz, coding_rate)
-    taxa_calculada = (taxa_teorica * psr_percentual) / 100
+    taxa_calculada = round((taxa_teorica * psr_percentual) / 100,3)
     return taxa_teorica, taxa_calculada
 
 # Define a pasta onde estão os dados brutos
@@ -212,7 +212,7 @@ while True:
             try:
                 sf_pacote = int(partes[2])
                 bw_pacote = MAPA_BANDWIDTH.get(int(partes[3]), 125)
-                cr_pacote = MAPA_CODINGRATE.get(int(partes[4]), 1)#5
+                cr_pacote = MAPA_CODINGRATE.get(int(partes[4]), 1)
                 TAXA_TEORICA, TAXA_CALCULADA = calcula_taxa_canal(sf_pacote, bw_pacote, cr_pacote, PSR)
             except (ValueError, ZeroDivisionError):
                 TAXA_TEORICA, TAXA_CALCULADA = None, None

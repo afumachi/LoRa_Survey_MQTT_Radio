@@ -162,12 +162,12 @@ def atualizar_grafico(ax1, ax2, ax3, ax4, canvas1, canvas2, canvas3, canvas4, ra
         label_psr.config(text="PSR atual: --")
 
     if taxa_teorica:
-        label_taxa_teorica.config(text="Taxa Teórica atual: " + str(round(taxa_teorica[-1],2)) + " bps")
+        label_taxa_teorica.config(text="Taxa Teórica atual: " + str(round(taxa_teorica[-1],3)) + " bps")
     else:
         label_taxa_teorica.config(text="Taxa Teórica atual: --")
 
     if taxa_calculada:
-        label_taxa_calculada.config(text="Taxa Real atual: " + str(round(taxa_calculada[-1],2)) + " bps")
+        label_taxa_calculada.config(text="Taxa Real atual: " + str(round(taxa_calculada[-1],3)) + " bps")
     else:
         label_taxa_calculada.config(text="Taxa Real atual: --")
 

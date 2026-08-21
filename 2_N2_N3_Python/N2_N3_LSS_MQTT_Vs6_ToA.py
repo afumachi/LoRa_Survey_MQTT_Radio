@@ -253,7 +253,9 @@ def calculo_toa_radio_lora(n_preambulo=8, header_impl=False, crc_on=True, low_dr
     # Retorna ToA em ms e bitrate em bps
     ToA_ms = (tempo_preambulo + tempo_pacote_toa) * 1000
     # bitrate = (tamanho_do_pacote * 8) / (ToA_ms / 1000)
-    # (SF*((BW*1000)/(2^SF))*(4/(4+CR)))/1000
+    # bitrate = (SF*((BW*1000)/(2^SF))*(4/(4+CR)))/1000
+
+    bitrate = (valor_atual_spreadingfactor*((BANDWIDTH_Hz)/(2**valor_atual_spreadingfactor))*(4/(4+valor_CR)))
 
     print("### Time On Air (ToA [ms]): ", ToA_ms)
     # calcula valor do tempo da comunicação serial + entre o Envio do Pacote via LoRa de Downlink + Uplink + Tempo Processamento NodeMCU
