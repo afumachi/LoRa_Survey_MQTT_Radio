@@ -130,7 +130,7 @@ void Phy_radio_receive_UL() {
       for (int i = 0; i < TAMANHO_PACOTE; i++) {
         PacoteUL[i] = LoRa.read();
       }
-
+  
       // zera controle standby caso recebido Pacote_UL
       millis_standby_controle = millis();
       
