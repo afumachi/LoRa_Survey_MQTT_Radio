@@ -13,8 +13,12 @@
 // =====================================================================
 //                     2 - Configurações MQTT
 // =====================================================================
+// Configurações do Broker Mosquitto (Usando o broker público oficial)
+//const char* MQTT_BROKER = "test.mosquitto.org";
+
+// Configurações do Broker HiveMQ (Usando o broker público oficial)
 const char* MQTT_BROKER   = "broker.hivemq.com";
-//const char* MQTT_BROKER   = "broker.mosquitto.com";
+
 const int   MQTT_PORT     = 1883;
 const char* TOPIC_DL      = "mot_lora_mqtt_A2F/gateway/downlink";  // Python → ESP32
 const char* TOPIC_UL      = "mot_lora_mqtt_A2F/gateway/uplink";    // ESP32  → Python
