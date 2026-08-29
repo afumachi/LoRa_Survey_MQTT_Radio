@@ -15,6 +15,7 @@
 // =====================================================================
 const char* MQTT_BROKER   = "broker.hivemq.com";
 //const char* MQTT_BROKER   = "test.mosquitto.org";
+
 const int   MQTT_PORT     = 1883;
 const char* TOPIC_DL      = "mot_lora_mqtt_A2F/gateway/downlink";  // Python → ESP32
 const char* TOPIC_UL      = "mot_lora_mqtt_A2F/gateway/uplink";    // ESP32  → Python
@@ -33,9 +34,11 @@ void conectar_wifi_multi() {
   // Cadastre quantas redes você quiser (SSID, Senha)
   wifiMulti.addAP("MJCA_FUNDOS", "21092429MJC@");
   wifiMulti.addAP("COLETTI_ADV_CRIS", "45384609");
+	wifiMulti.addAP("COLETTI_ext", "1145384609");
 	wifiMulti.addAP("aafwifi", "aaf12345678");
 	wifiMulti.addAP("CHACARA BBC", "Ailton1960#");
 	wifiMulti.addAP("Claro-EB66", "54b80a7deb66");
+
 }
 
 // uffer e flag para o pacote DL recebido via MQTT
