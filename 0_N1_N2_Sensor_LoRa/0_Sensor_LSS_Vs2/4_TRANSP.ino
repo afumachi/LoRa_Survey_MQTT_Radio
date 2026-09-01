@@ -28,11 +28,11 @@ void Transp_radio_send_UL() {
     contadorUL = contadorUL + 1;  // Incrementa o contador de pacote de UL
   }
 
-  PacoteUL[DL_COUNTER_MSB] = contador_perda_DL/256; //PacoteDL[DL_COUNTER_MSB];
-  PacoteUL[DL_COUNTER_LSB] = contador_perda_DL%256; //PacoteDL[DL_COUNTER_LSB];
+  PacoteUL[12] = contador_perda_DL/256; //PacoteDL[DL_COUNTER_MSB];
+  PacoteUL[13] = contador_perda_DL%256; //PacoteDL[DL_COUNTER_LSB];
 
-  PacoteUL[UL_COUNTER_MSB] = contadorUL/256; // = (contadorUL >> 8) & 0xFF; 
-  PacoteUL[UL_COUNTER_LSB] = contadorUL%256; // = contadorUL & 0xFF;
+  PacoteUL[14] = contadorUL/256; // = (contadorUL >> 8) & 0xFF; 
+  PacoteUL[15] = contadorUL%256; // = contadorUL & 0xFF;
   // neste ponto pode ser implementado um controle relacionado ao recebimento não sequencial de pacotes de DL
 
   Net_radio_send_UL();
