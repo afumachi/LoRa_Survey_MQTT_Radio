@@ -36,8 +36,8 @@ MQTTClient mqttClient(256);   // buffer de 256 bytes (read/write)
 // Cofiguração das redes Wi-Fi 2.4GHz disponíveis
 void conectar_wifi_multi() {
   // Cadastre quantas redes você quiser (SSID, Senha)
-  wifiMulti.addAP("COLETTI_ADV_CRIS", "45384609");
-  wifiMulti.addAP("SSID_2", "password_2");
+  wifiMulti.addAP("SSID_1", "senha_1");
+  wifiMulti.addAP("SSID_2", "senha_2");
 
 }
 
