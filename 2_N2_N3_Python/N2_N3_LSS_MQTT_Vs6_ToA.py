@@ -610,7 +610,7 @@ try:
                     
                     downlink()
                                           
-                    time.sleep(toa_entre_medidas/4)
+                    time.sleep(toa_entre_medidas/3)
 
                     uplink()
 
