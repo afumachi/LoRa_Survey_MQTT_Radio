@@ -17,8 +17,8 @@
 //const char* MQTT_BROKER = "test.mosquitto.org";
 
 // Configurações do Broker HiveMQ (Usando o broker público oficial)
-const char* MQTT_BROKER   = "broker.hivemq.com";
-//const char* MQTT_BROKER   = "test.mosquitto.org";
+//const char* MQTT_BROKER   = "broker.hivemq.com";
+const char* MQTT_BROKER   = "test.mosquitto.org";
 
 const int   MQTT_PORT     = 1883;
 const char* TOPIC_DL      = "mot_lora_mqtt_A2F/gateway/downlink";  // Python → ESP32
@@ -36,9 +36,10 @@ MQTTClient mqttClient(256);   // buffer de 256 bytes (read/write)
 // Cofiguração das redes Wi-Fi 2.4GHz disponíveis
 void conectar_wifi_multi() {
   // Cadastre quantas redes você quiser (SSID, Senha)
+	wifiMulti.addAP("COLETTI_ext", "1145384609");
   wifiMulti.addAP("MJCA_FUNDOS", "21092429MJC@");
   wifiMulti.addAP("COLETTI_ADV_CRIS", "45384609");
-	wifiMulti.addAP("COLETTI_ext", "1145384609");
+
 	wifiMulti.addAP("aafwifi", "aaf12345678");
 	wifiMulti.addAP("CHACARA BBC", "Ailton1960#");
 	wifiMulti.addAP("Claro-EB66", "54b80a7deb66");

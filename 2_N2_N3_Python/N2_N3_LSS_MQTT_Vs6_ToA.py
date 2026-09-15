@@ -608,6 +608,7 @@ try:
               # ===================== LOOP DE ENVIO DE PACOTES =============
                     Tempo_inicio_pacote = time.time()
                     
+
                     downlink()
                                           
                     time.sleep(toa_entre_medidas/3)

@@ -41,12 +41,12 @@ byte PacoteUL[TAMANHO_PACOTE];
 
 // ---- DECLARAÇÃO DIAGRAMA DE PINOS DO PROJETO ----
 // Pinos utilizados para comunicação SPI entre ESP32 e RFM95 - Módulo LoRa
-#define SCK 18 // PKLORA5
+#define SCK 5 // 5 PKLORA // 18 Placa Pessoal
 #define MISO 19			
-#define MOSI 23 // PKLORA27		
+#define MOSI 27 // 27 PKLORA		// 23 Placa pessoal
 
 // Pinos do RFM95 - Módulo LoRa
-#define SS 5 // 18 PKLORA
+#define SS 18 // 18 PKLORA // 5 Placa pessoal
 #define RST 14			
 #define DIO0 26
 
