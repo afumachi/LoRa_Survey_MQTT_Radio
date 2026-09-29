@@ -9,8 +9,8 @@
 // Hardware - Configuração da Seleção do Tipo de Hardware (ESP32 ou NODEMCU)
 // Remova o comentário da linha referente à placa que você está usando no momento e comente a outra
 
-#define PKLORA_ESP32 // HARDWARE COM ESP32
-//#define PKLORA_NODEMCU // HARDWARE COM ESP12E - NODEMCU
+//#define PKLORA_ESP32 // HARDWARE COM ESP32
+#define PKLORA_NODEMCU // HARDWARE COM ESP12E - NODEMCU
 
 //=======================================================================
 // 1 - Bibliotecas
@@ -19,7 +19,7 @@
 #include "Bibliotecas.h"  // Arquivo contendo declaração de bibliotecas e variáveis
 
 // =====================================================================
-//                     2 - Configurações MQTT
+// 2 - Configurações MQTT
 // =====================================================================
 // Configurações do Broker Mosquitto (Usando o broker público oficial)
 //const char* MQTT_BROKER = "test.mosquitto.org";
@@ -47,22 +47,13 @@ String CLIENT_ID ;         // ID único no broker
 // --- Objeto MQTT ---
 MQTTClient mqttClient(256);   // buffer de 256 bytes (read/write)
 
-// Cofiguração das redes Wi-Fi 2.4GHz disponíveis
 
 // Cofiguração das redes Wi-Fi 2.4GHz disponíveis
 void conectar_wifi_multi() {
-
-  #if defined(PKLORA_ESP32)
-    // Cadastre quantas redes você quiser (SSID, Senha)
-    wifiMulti.addAP("MJCA_FUNDOS", "21092429MJC@");
-    wifiMulti.addAP("COLETTI_ADV_CRIS", "45384609");    
-  #endif
-
-  #if defined(PKLORA_NODEMCU)
     // Registra as redes desejadas (pode adicionar mais de uma)
-    wifiMulti.addAP("MJCA_FUNDOS", "21092429MJC@");
-    wifiMulti.addAP("COLETTI_ADV_CRIS", "45384609");
-  #endif
+
+    wifiMulti.addAP("SSID1", "password1");
+    wifiMulti.addAP("SSID2", "password2");
 
 }
 
