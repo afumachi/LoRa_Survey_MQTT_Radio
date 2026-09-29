@@ -32,8 +32,8 @@ BROKER        = "broker.hivemq.com"
 PORTA_MQTT    = 1883
 
 # MODIFIQUE O TOPIC_DL E TOPIC_UL de acordo com SEU_NOME
-TOPIC_DL      = "mot_lora_mqtt_A2F/gateway/downlink"   # Python publica → ESP32 assina
-TOPIC_UL      = "mot_lora_mqtt_A2F/gateway/uplink"     # ESP32 publica  → Python assina
+TOPIC_DL      = "mot_lora_194104/gateway/downlink"   # Python publica → ESP32 assina
+TOPIC_UL      = "mot_lora_194104/gateway/uplink"     # ESP32 publica  → Python assina
 
 # QoS usado nos dois sentidos (DL e UL). QoS1 = "at least once": o broker
 # confirma (PUBACK) e há retransmissão se a confirmação não chegar.
@@ -608,10 +608,9 @@ try:
               # ===================== LOOP DE ENVIO DE PACOTES =============
                     Tempo_inicio_pacote = time.time()
                     
-
                     downlink()
                                           
-                    time.sleep(toa_entre_medidas/3)
+                    time.sleep(toa_entre_medidas/2)
 
                     uplink()
 

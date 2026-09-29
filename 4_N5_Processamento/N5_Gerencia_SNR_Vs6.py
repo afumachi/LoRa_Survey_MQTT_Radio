@@ -1,6 +1,7 @@
 # FEE247 - Desenvolvimento de Soluções IoT com LoRa e LoRaWAN
 #======= Nível 5 - Gerência ============
 # Extrai RSSI dos dados brutos e calcula a PSR
+import sys
 import time
 import os
 import math
@@ -288,4 +289,6 @@ while True:
         time.sleep(1)
     except KeyboardInterrupt:
         print("\n[Ctrl + C] Interrompido pelo usuário.")
+        sys.exit(0)  # Encerra o script imediatamente
+        
         
