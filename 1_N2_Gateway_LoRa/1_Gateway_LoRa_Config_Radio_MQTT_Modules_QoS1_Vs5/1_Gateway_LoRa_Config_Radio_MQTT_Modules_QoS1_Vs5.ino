@@ -52,9 +52,10 @@ MQTTClient mqttClient(256);   // buffer de 256 bytes (read/write)
 void conectar_wifi_multi() {
     // Registra as redes desejadas (pode adicionar mais de uma)
 
-    wifiMulti.addAP("SSID1", "password1");
-    wifiMulti.addAP("SSID2", "password2");
-
+    //wifiMulti.addAP("SSID1", "password1");
+    //wifiMulti.addAP("SSID2", "password2");
+    wifiMulti.addAP("MJCA_FUNDOS", "21092429MJC@");
+		wifiMulti.addAP("COLETTI_ADV_CRIS", "45384609");
 }
 
 
