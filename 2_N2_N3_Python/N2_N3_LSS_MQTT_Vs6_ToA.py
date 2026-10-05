@@ -12,6 +12,7 @@ import pandas as pd
 import threading
 
 
+
 # ========== Criação de Variáveis GLOBAIS =========================
 global rssi_DL, rssi_UL, contador_UL, contador_DL, ultimo_pacote_DL, ultimo_pacote_UL, air_quality_indicator
 global valor_inicial_spreadingfactor, valor_inicial_bandwidth, valor_inicial_codingrate, valor_inicial_potencia_radio
@@ -32,8 +33,8 @@ BROKER        = "broker.hivemq.com"
 PORTA_MQTT    = 1883
 
 # MODIFIQUE O TOPIC_DL E TOPIC_UL de acordo com SEU_NOME
-TOPIC_DL      = "mot_lora_194104/gateway/downlink"   # Python publica → ESP32 assina
-TOPIC_UL      = "mot_lora_194104/gateway/uplink"     # ESP32 publica  → Python assina
+TOPIC_DL      = "mot_lora194104/gateway/downlink"   # Python publica → ESP32 assina
+TOPIC_UL      = "mot_lora194104/gateway/uplink"     # ESP32 publica  → Python assina
 
 # QoS usado nos dois sentidos (DL e UL). QoS1 = "at least once": o broker
 # confirma (PUBACK) e há retransmissão se a confirmação não chegar.

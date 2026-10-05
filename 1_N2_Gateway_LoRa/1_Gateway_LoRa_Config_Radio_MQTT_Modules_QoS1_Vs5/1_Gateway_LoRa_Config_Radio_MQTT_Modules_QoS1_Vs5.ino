@@ -28,8 +28,8 @@
 const char* MQTT_BROKER   = "broker.hivemq.com";
 
 const int   MQTT_PORT     = 1883;
-const char* TOPIC_DL      = "mot_lora_194104/gateway/downlink";  // Python → ESP32
-const char* TOPIC_UL      = "mot_lora_194104/gateway/uplink";    // ESP32  → Python
+const char* TOPIC_DL      = "mot_lora194104/gateway/downlink";  // Python → ESP32
+const char* TOPIC_UL      = "mot_lora194104/gateway/uplink";    // ESP32  → Python
 String CLIENT_ID ;         // ID único no broker
 
 // QoS usado nos dois sentidos (DL e UL). QoS1 = "at least once": o broker

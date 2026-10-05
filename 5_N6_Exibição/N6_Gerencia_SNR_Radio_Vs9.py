@@ -19,6 +19,7 @@ from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 import math
 
+
 style.use("ggplot")
 
 dir_nivel4 = os.path.join(os.path.dirname(__file__), '../3_N4_Armazenamento/Parametros/')
