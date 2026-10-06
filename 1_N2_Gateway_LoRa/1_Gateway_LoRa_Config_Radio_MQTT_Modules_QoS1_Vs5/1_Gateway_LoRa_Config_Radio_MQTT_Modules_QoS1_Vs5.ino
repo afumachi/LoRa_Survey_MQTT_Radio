@@ -9,8 +9,8 @@
 // Hardware - Configuração da Seleção do Tipo de Hardware (ESP32 ou NODEMCU)
 // Remova o comentário da linha referente à placa que você está usando no momento e comente a outra
 
-#define PKLORA_ESP32 // HARDWARE COM ESP32
-//#define PKLORA_NODEMCU // HARDWARE COM ESP12E - NODEMCU
+//#define PKLORA_ESP32 // HARDWARE COM ESP32
+#define PKLORA_NODEMCU // HARDWARE COM ESP12E - NODEMCU
 
 //=======================================================================
 // 1 - Bibliotecas
