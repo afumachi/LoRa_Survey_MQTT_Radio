@@ -9,8 +9,8 @@
 // Hardware - Configuração da Seleção do Tipo de Hardware (ESP32 ou NODEMCU)
 // Remova o comentário da linha referente à placa que você está usando no momento e comente a outra
 
-//#define PKLORA_ESP32 // HARDWARE COM ESP32
-#define PKLORA_NODEMCU // HARDWARE COM ESP12E - NODEMCU
+#define PKLORA_ESP32 // HARDWARE COM ESP32
+//#define PKLORA_NODEMCU // HARDWARE COM ESP12E - NODEMCU
 
 //=======================================================================
 // 1 - Bibliotecas
@@ -30,8 +30,8 @@
 const char* MQTT_BROKER = "www.tpm.dev.br";
 
 const int   MQTT_PORT     = 1883;
-const char* TOPIC_DL      = "mot_lora194104/gateway/downlink";  // Python → ESP32
-const char* TOPIC_UL      = "mot_lora194104/gateway/uplink";    // ESP32  → Python
+const char* TOPIC_DL      = "mot_mqtt_194104/gateway/downlink";  // Python → ESP32
+const char* TOPIC_UL      = "mot_mqtt_194104/gateway/uplink";    // ESP32  → Python
 String CLIENT_ID ;         // ID único no broker
 
 // QoS usado nos dois sentidos (DL e UL). QoS1 = "at least once": o broker

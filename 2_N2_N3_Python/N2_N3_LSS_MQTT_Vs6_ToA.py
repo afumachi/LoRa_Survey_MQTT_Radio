@@ -36,8 +36,8 @@ BROKER        = "www.tpm.dev.br"
 PORTA_MQTT    = 1883
 
 # MODIFIQUE O TOPIC_DL E TOPIC_UL de acordo com SEU_NOME
-TOPIC_DL      = "mot_lora194104/gateway/downlink"   # Python publica → ESP32 assina
-TOPIC_UL      = "mot_lora194104/gateway/uplink"     # ESP32 publica  → Python assina
+TOPIC_DL      = "mot_mqtt_194104/gateway/downlink"   # Python publica → ESP32 assina
+TOPIC_UL      = "mot_mqtt_194104/gateway/uplink"     # ESP32 publica  → Python assina
 
 # QoS usado nos dois sentidos (DL e UL). QoS1 = "at least once": o broker
 # confirma (PUBACK) e há retransmissão se a confirmação não chegar.
@@ -614,7 +614,7 @@ try:
                     
                     downlink()
                                           
-                    time.sleep(toa_entre_medidas/2)
+                    time.sleep(toa_entre_medidas)
 
                     uplink()
 
