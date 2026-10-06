@@ -69,7 +69,6 @@ void Phy_radio_receive_DL() {
       tempo_radio               = PacoteDL[6];
       recebe_comando_nova_radio = PacoteDL[7];
 
-
       // --- Lógica de inicio da contagem para MAC4_COMANDO == 4 ---
       if (recebe_comando_nova_radio != 0) {
 
@@ -79,17 +78,13 @@ void Phy_radio_receive_DL() {
           controle_ativo         = true;
 
           Serial.println("[CONTROLE NÃO ATIVO] Pacote DL Recebido. Contagem iniciada. ");
-          //Serial.print((unsigned long)tempo_radio * 10UL * 1000UL);
-          //Serial.println(" ms");
 
         } else {
           // Pacote com comando chegou novamente enquanto contagem ativa:
           // Reinicia a contagem com o novo tempo recebido
           millis_inicio_controle = millis();
-
           Serial.println("[CONTROLE] Pacote DL Recebido. Contagem reiniciada.");
-          //Serial.print((unsigned long)tempo_radio * 10UL * 1000UL);
-          //Serial.println(" ms");
+
         }
 
       } else {

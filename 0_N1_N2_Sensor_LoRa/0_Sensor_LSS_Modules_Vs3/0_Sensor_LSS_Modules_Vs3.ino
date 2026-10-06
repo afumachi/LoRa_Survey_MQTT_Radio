@@ -119,7 +119,7 @@ void loop() {
   // --- Controle de timeout do Comando 4 ---
   // Executado a cada iteração do loop, independente de novo pacote chegar
   if (controle_ativo) {
-    unsigned long tempo_limite_ms = (unsigned long)tempo_radio * 50UL * 1000UL; // 10x o valor recebido em MAC3_TEMPO
+    unsigned long tempo_limite_ms = (unsigned long)  * 50UL * 1000UL; // 10x o valor recebido em MAC3_TEMPO
     millis_inicio_controle = millis();
 
 //    if (millis() - millis_inicio_controle >= tempo_limite_ms) {

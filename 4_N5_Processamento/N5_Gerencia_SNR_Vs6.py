@@ -1,6 +1,7 @@
 # FEE247 - Desenvolvimento de Soluções IoT com LoRa e LoRaWAN
 #======= Nível 5 - Gerência ============
-# Extrai RSSI dos dados brutos e calcula a PSR
+# Extrai RSSI e SNR dos dados brutos e calcula a PSR e Taxa de dados em [bps]
+
 import sys
 import time
 import os
@@ -167,8 +168,8 @@ while True:
 
             # Se todos os bytes do UL forem diferente de 9, considera pacote recebido
             pacote_recebido = 0
-            for j in range(20):
-                if int(partes[22+j]) != 9:
+            for j in range(10):
+                if int(partes[23+j]) != 9:
                     pacote_recebido = 1
 
             if pacote_recebido == 1:

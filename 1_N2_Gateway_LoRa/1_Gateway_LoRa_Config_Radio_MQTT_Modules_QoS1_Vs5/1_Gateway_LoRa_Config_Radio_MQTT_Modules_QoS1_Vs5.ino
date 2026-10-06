@@ -25,7 +25,9 @@
 //const char* MQTT_BROKER = "test.mosquitto.org";
 
 // Configurações do Broker HiveMQ (Usando o broker público oficial)
-const char* MQTT_BROKER   = "broker.hivemq.com";
+//const char* MQTT_BROKER   = "broker.hivemq.com";
+
+const char* MQTT_BROKER = "www.tpm.dev.br";
 
 const int   MQTT_PORT     = 1883;
 const char* TOPIC_DL      = "mot_lora194104/gateway/downlink";  // Python → ESP32

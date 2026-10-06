@@ -28,8 +28,11 @@ global estado_lss, toa_entre_medidas
 
 
 # ===== Configurações MQTT =====
-BROKER        = "broker.hivemq.com"
+#BROKER        = "broker.hivemq.com"
 #BROKER        = "test.mosquitto.org"
+
+BROKER        = "www.tpm.dev.br"
+
 PORTA_MQTT    = 1883
 
 # MODIFIQUE O TOPIC_DL E TOPIC_UL de acordo com SEU_NOME
